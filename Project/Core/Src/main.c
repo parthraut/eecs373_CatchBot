@@ -84,9 +84,6 @@ static void MX_TIM4_Init(void);
 #define PIXY_SYNC_BYTE              0x5a
 #define PIXY_SYNC_BYTE_DATA         0x5b
 
-#define PIXY_SIG_BALL				1
-#define PIXY_SIG_FLOOR				2
-
 // the routines
 void pixy_init();
 int getStart(void);
@@ -217,9 +214,72 @@ void pixy_init()
 //
 // ============================
 
+// ============================
+//
+// Start: Code to handle PWM and State
+//
+// ============================
+
+// Sets a timer's PWM to a value
+// timerIndex = which timer (eg TIM2 -> pass 2, TIM3 -> pass 3)
+// pwmVal = value to set that timer's CCR to; these should be defined below
+void SetPWM(uint16_t timerIndex, uint16_t pwmVal)
+{
+	TIM_TypeDef* timer;
+
+	switch (timerIndex)
+	{
+	case 2:
+		timer = TIM2;
+		break;
+	case 3:
+		timer = TIM3;
+		break;
+	case 4:
+		timer = TIM4;
+		break;
+	default:
+		return; // just in case.
+	}
+
+	timer->CCR3 = pwmVal;
+}
+
+// States the machine will be in
+#define STATE_FIND_BALL		0
+#define STATE_GRAB_BALL		1
+#define STATE_RETURN_BALL	2
+
+uint8_t currentState = STATE_FIND_BALL;
+
+// Updates the current state
+void UpdateState(uint8_t nextState)
+{
+	currentState = nextState;
+	switch(currentState)
+	{
+	case STATE_FIND_BALL:
+		ResetAverage();
+		break;
+	case STATE_GRAB_BALL:
+		break;
+	case STATE_RETURN_BALL:
+		ResetAverage();
+		break;
+	}
+}
+
+// ============================
+//
+// Start: Code to handle data from the Pixy cam
+//
+// ============================
+
+// Structures to get data from the Pixy cam
 uint8_t rx_data[2];
 uint8_t tx_data[2] = { PIXY_SYNC_BYTE, 0 };
 
+// Gets one byte from the Pixy cam
 uint8_t getByte(uint8_t output)
 {
 	HAL_StatusTypeDef hal_status;
@@ -237,6 +297,7 @@ uint8_t getByte(uint8_t output)
 	return data;
 }
 
+// Gets a word (2 bytes) from the Pixy cam
 uint16_t getWord(void)
 {
 	uint16_t w;
@@ -251,20 +312,26 @@ uint16_t getWord(void)
 	return w;
 }
 
-/* misc notes:
- * middle of x is around 160, keep ball in 150-170 range?
- */
-
+// Variables for handling the running average
+// We're just keeping track of the X value of whatever we're tracking
 uint16_t xVals[4] = { 0, 0, 0, 0 };
 uint16_t xValsIndex = 0;
 float runningAverage = 0.0f;
 
+// Resets the running average and array
+void ResetAverage()
+{
+	xVals[0] = xVals[1] = xVals[2] = xVals[3] = 0;
+	runningAverage = 0.0f;
+}
+
+// Gets the index of whatever signature we're looking for in the block data from the Pixy cam
+// I'm basically assuming whatever we're looking for will be the first piece of data in the blocks.
 uint16_t GetSignatureIndex(uint32_t num_blocks, uint8_t sigVal)
 {
 	int i = 0;
 	while (i < num_blocks)
 	{
-		// currently assuming the ball is registered as yellow
 		if (g_blocks[i].signature == sigVal)
 			break;
 		i++;
@@ -272,44 +339,228 @@ uint16_t GetSignatureIndex(uint32_t num_blocks, uint8_t sigVal)
 	return i;
 }
 
-void GetNextBallX()
+// Signatures of the items we're looking for
+// Will need to make sure these match the actual signatures in the Pixy cam
+#define PIXY_SIG_BALL				1
+#define PIXY_SIG_RETURN				2
+
+// temporary, idk if it'll even work
+#define WIDTH	240
+
+// Gets the X value of the signature items and updates the running average
+// sig = one of the two signatures defined above
+void GetNextX(uint8_t sig)
 {
 	uint32_t num_blocks = getBlocks(PIXY_ARRAYSIZE);
 	if (!num_blocks)
 		return;
 
-	uint16_t index = GetSignatureIndex(num_blocks, PIXY_SIG_BALL);
+	uint16_t index = GetSignatureIndex(num_blocks, sig);
 	uint16_t newX = 0;
 	if (index != num_blocks)
 	{
 		newX = g_blocks[index].x;
 	}
 
-	// x vals don't go above 320, 16 bits is overkill regardless
+	// x vals don't go above 320
 	int16_t diff = newX - xVals[xValsIndex];
 	runningAverage += diff * 0.25f;
 
 	xVals[xValsIndex] = newX;
 	xValsIndex = (xValsIndex + 1) % 4;
+
+	// I have no idea if this will even work, I just wanted to make sure there was a way to get to each state
+	if (g_blocks[index].width >= WIDTH)
+		UpdateState(STATE_GRAB_BALL);
 }
 
-void SetPWM(uint16_t timerIndex, uint16_t pwmVal)
+
+// Updates the Pixy cam
+void UpdatePixyCam()
 {
-	TIM_TypeDef* timer;
-
-	switch (timerIndex)
+	switch (currentState)
 	{
-	case 2:
-		timer = TIM2;
+	case STATE_FIND_BALL:
+		GetNextX(PIXY_SIG_BALL);
 		break;
-	case 3:
-		timer = TIM3;
+	case STATE_GRAB_BALL:
+		return; // pixy cam doesn't need to do anything here
+	case STATE_RETURN_BALL:
+		GetNextX(PIXY_SIG_RETURN);
 		break;
-	default:
-		return; // just in case.
 	}
+}
 
-	timer->CCR3 = pwmVal;
+// ============================
+//
+// Start: Code to handle wheel control
+//
+// ============================
+
+// Defines to make code more readable.
+#define WHEEL_LEFT			2
+#define WHEEL_RIGHT			3
+#define WHEEL_SPEED_ZERO	139
+#define WHEEL_SPEED_FULL	0
+#define MAX_BALL_X			220.0f
+#define MIN_BALL_X			100.0f
+#define MAX_RETURN_X		190.0f
+#define MIN_RETURN_X		130.0f
+
+// Sets the wheel speed
+// speed = PWM value for the wheel
+// wheel = which wheel to use
+// Use the defines above.
+void SetWheelSpeed(uint8_t speed, uint8_t wheel)
+{
+	// still need to determine which timer is controlling which wheel
+	// speed = PWM value
+	SetPWM(wheel, speed);
+}
+
+// Updates the wheel speed
+// avgMax = max value the running average can be
+// avgMin = min value the running average can be
+// speed = speed to set the wheels
+// This will turn off one of the wheels depending on where the ball is
+void UpdateWheelSpeed(uint8_t avgMax, uint8_t avgMin, uint8_t speed)
+{
+	uint8_t wheelLeftSpeed = speed;
+	uint8_t wheelRightSpeed = speed;
+	if (runningAverage < avgMin)
+		wheelLeftSpeed = WHEEL_SPEED_ZERO;
+	if (runningAverage > avgMax)
+		wheelRightSpeed = WHEEL_SPEED_ZERO;
+
+	SetWheelSpeed(WHEEL_LEFT, wheelLeftSpeed);
+	SetWheelSpeed(WHEEL_RIGHT, wheelRightSpeed);
+}
+
+// Updates the wheels
+void UpdateWheels()
+{
+	uint8_t speed = WHEEL_SPEED_ZERO - WHEEL_SPEED_FULL;
+	switch (currentState)
+	{
+	case STATE_FIND_BALL:
+		UpdateWheelSpeed(MAX_BALL_X, MIN_BALL_X, speed);
+		break;
+	case STATE_GRAB_BALL:
+		// division by 2 is to slow it down
+		UpdateWheelSpeed(-1, 480, speed / 2); // -1 and 480 are just arbitrary, they need to be outside the pixy cam's x range
+		break;
+	case STATE_RETURN_BALL:
+		UpdateWheelSpeed(MAX_RETURN_X, MIN_RETURN_X, speed);
+		break;
+	}
+}
+
+// ============================
+//
+// Start: Code to handle IR Sensor
+//
+// ============================
+
+#define DIST_TO_BALL	9.0f
+
+// Checks the value reported by the IR sensor
+uint8_t CheckIR()
+{
+	uint8_t adcVal = 0;
+	HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
+	adcVal = HAL_ADC_GetValue(&hadc1);
+	float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+	if (distVal <= DIST_TO_BALL)
+		return 1;
+	return 0;
+}
+
+// ============================
+//
+// Start: Code to handle claw control
+//
+// ============================
+
+// Defines to make code more readable
+#define CLAW_OPEN		100
+#define CLAW_CLOSED		160
+#define PUSH_TIME		80000
+#define WAIT_TIME		4000000
+
+// Closes the claw
+void CloseClaw()
+{
+	SetPWM(4, CLAW_CLOSED);
+}
+
+// Opens the claw
+void OpenClaw()
+{
+	SetPWM(4, CLAW_OPEN);
+}
+
+// Routine for returning the ball
+void ReturnBall()
+{
+	uint8_t speed = WHEEL_SPEED_ZERO - WHEEL_SPEED_FULL;
+	//speed /= 2;
+
+	// roll the ball forward
+	SetWheelSpeed(WHEEL_LEFT, speed);
+	SetWheelSpeed(WHEEL_RIGHT, speed);
+	OpenClaw();
+	for (int i = 0; i < PUSH_TIME; i++);
+
+	// stop for a little bit
+	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
+	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+	for (int i = 0; i < WAIT_TIME; i++);
+
+	// turn a bit so the camera doesn't immediately find the ball again
+	SetWheelSpeed(WHEEL_LEFT, speed);
+	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+	for (int i = 0; i < PUSH_TIME; i++);
+}
+
+// Update the claw
+void UpdateClaw()
+{
+	switch (currentState)
+	{
+	case STATE_FIND_BALL:
+		return; // Claw shouldn't need to do anything here
+	case STATE_GRAB_BALL:
+		if (CheckIR())
+		{
+			CloseClaw();
+			UpdateState(STATE_RETURN_BALL);
+		}
+		break;
+	case STATE_RETURN_BALL:
+		if (runningAverage >= MIN_RETURN_X &&
+			runningAverage <= MAX_RETURN_X)
+		{
+			ReturnBall();
+			UpdateState(STATE_FIND_BALL);
+		}
+		break;
+	}
+}
+
+// Initializes the timers for the wheels
+void WheelsInit()
+{
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
+	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+}
+
+// Initializes the timer for the claw
+void ClawInit()
+{
+	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+	OpenClaw();
 }
 
 /* USER CODE END 0 */
@@ -320,84 +571,110 @@ void SetPWM(uint16_t timerIndex, uint16_t pwmVal)
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-  /* USER CODE END 1 */
+	/* USER CODE BEGIN 1 */
+	/* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* USER CODE BEGIN Init */
-  //int i = 0, curr = 0, prev = 0, iteration = 0;
-  pixy_init();
-  /* USER CODE END Init */
+	/* USER CODE BEGIN Init */
+	pixy_init();
+	/* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	/* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	/* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_SPI1_Init();
-  MX_LPUART1_UART_Init();
-  MX_ADC1_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
-  MX_TIM4_Init();
-  /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_SPI1_Init();
+	MX_LPUART1_UART_Init();
+	MX_ADC1_Init();
+	MX_TIM2_Init();
+	MX_TIM3_Init();
+	MX_TIM4_Init();
+	/* USER CODE BEGIN 2 */
+	WheelsInit();
+	ClawInit();
 
-  uint16_t tim2PWMCCR = 79;
-  uint16_t tim3PWMCCR = 79;
+	// I don't think we're using these?
+	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+	//HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
+	/* USER CODE END 2 */
 
-  uint16_t addition = 1;
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
-  /* USER CODE END 2 */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+	while (1)
+	{
+		UpdatePixyCam();
+		UpdateWheels();
+		UpdateClaw();
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-	  //GetNextBallX();
-	  printf("avg: %d\n", tim2PWMCCR);
+		/*
+		//Used to test the Claw PMW, Timer is on 2.5ms period and .1MHz resolution
+		//https://www.gie.com.my/shop.php?action=robotics/motors/ldx335
 
-	  SetPWM(2, tim2PWMCCR);
-	  SetPWM(3, tim3PWMCCR);
+		// I'm leaving all this old code here for reference.
+		tim4PWMCCR = clawTest;
+		SetPWM(4, tim4PWMCCR);
+		for (int i = 0; i < 100000; i++);
+		clawTest += add;
+		if (clawTest <= 100)
+			add = 2;
+		if (clawTest >= 160)
+			add = -2;
 
-	  tim2PWMCCR += addition;
-	  tim3PWMCCR = tim2PWMCCR;
-	  if (tim2PWMCCR == 139)
-		  addition = -1;
-	  if (tim2PWMCCR == 19)
-		  addition = 1;
+		// runningAverage = avg of x vals
+		tim2PWMCCR = 139;
+		tim3PWMCCR = tim2PWMCCR;
+		SetPWM(2, tim2PWMCCR);
+		SetPWM(3, tim3PWMCCR);
 
-	  for (int i = 0; i < 50000; i++);
-	  /*
-	  int ADC_VAL = 0;
-	  HAL_ADC_Start(&hadc1);
-	  HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
-	  ADC_VAL = HAL_ADC_GetValue(&hadc1);
-	  float DIST_VAL = exp((log(ADC_VAL) - 10.66) / (-1.123));
-	  printf("dist: %f cm\n", DIST_VAL);
-	  for (int i = 0; i < 200000; i++);
-	  uint32_t num_blocks = getBlocks(PIXY_ARRAYSIZE);
-	  if (num_blocks)
-	  {
-		  //printf("num blocks: %d\n", num_blocks);
-		  printf("x: %d\n", g_blocks[0].x);
-	  }
-	  //*/
-    /* USER CODE END WHILE */
+		int ADC_VAL = 0;
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
+		ADC_VAL = HAL_ADC_GetValue(&hadc1);
+		float DIST_VAL = exp((log(ADC_VAL) - 10.66) / (-1.123));
+		//printf("Distance: %f cm\n\r", DIST_VAL);
 
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+		while (DIST_VAL > 9)
+		{
+			// Get updates from the pixy cam
+			GetNextBallX();
+
+			SetPWM(2, tim2PWMCCR);
+			SetPWM(3, tim3PWMCCR);
+			HAL_ADC_Start(&hadc1);
+			HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
+			ADC_VAL = HAL_ADC_GetValue(&hadc1);
+			float DIST_VAL = exp((log(ADC_VAL) - 10.66) / (-1.123));
+			//printf("Distance: %f cm\n", DIST_VAL);
+			//*
+			while (DIST_VAL < 9)
+			{
+				tim2PWMCCR = 139;
+				tim3PWMCCR = 139;
+				SetPWM(2, tim2PWMCCR);
+				SetPWM(3, tim3PWMCCR);
+				HAL_ADC_Start(&hadc1);
+				HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
+				ADC_VAL = HAL_ADC_GetValue(&hadc1);
+				DIST_VAL = exp((log(ADC_VAL) - 10.66) / (-1.123));
+				printf("Distance: %f cm\n", DIST_VAL);
+				for (int i = 0; i < 100000; i++);
+			}
+		}
+		//*/
+		/* USER CODE END WHILE */
+
+		/* USER CODE BEGIN 3 */
+	}
+	/* USER CODE END 3 */
 }
 
 /**
@@ -728,9 +1005,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 39;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 159;
+  htim4.Init.Period = 249;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
