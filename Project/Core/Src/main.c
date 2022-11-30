@@ -345,7 +345,7 @@ uint16_t GetSignatureIndex(uint32_t num_blocks, uint8_t sigVal)
 #define PIXY_SIG_RETURN				2
 
 // temporary, idk if it'll even work
-#define WIDTH	240
+#define HEIGHT	185
 
 // Gets the X value of the signature items and updates the running average
 // sig = one of the two signatures defined above
@@ -362,6 +362,8 @@ void GetNextX(uint8_t sig)
 		newX = g_blocks[index].x;
 	}
 
+	//printf("width: %d\n", g_blocks[index].height);
+	//printf("y val: %d\n", g_blocks[index].y);
 	// x vals don't go above 320
 	int16_t diff = newX - xVals[xValsIndex];
 	runningAverage += diff * 0.25f;
@@ -370,7 +372,7 @@ void GetNextX(uint8_t sig)
 	xValsIndex = (xValsIndex + 1) % 4;
 
 	// I have no idea if this will even work, I just wanted to make sure there was a way to get to each state
-	if (g_blocks[index].width >= WIDTH)
+	if (g_blocks[index].y >= HEIGHT && currentState == STATE_FIND_BALL)
 		UpdateState(STATE_GRAB_BALL);
 }
 
@@ -401,17 +403,18 @@ void UpdatePixyCam()
 #define WHEEL_LEFT			2
 #define WHEEL_RIGHT			3
 #define WHEEL_SPEED_ZERO	139
-#define WHEEL_SPEED_FULL	0
-#define MAX_BALL_X			220.0f
-#define MIN_BALL_X			100.0f
-#define MAX_RETURN_X		190.0f
-#define MIN_RETURN_X		130.0f
+#define WHEEL_SPEED_FULL	80
+#define WHEEL_SPEED_HALF	120
+#define MAX_BALL_X			220
+#define MIN_BALL_X			100
+#define MAX_RETURN_X		190
+#define MIN_RETURN_X		130
 
 // Sets the wheel speed
 // speed = PWM value for the wheel
 // wheel = which wheel to use
 // Use the defines above.
-void SetWheelSpeed(uint8_t speed, uint8_t wheel)
+void SetWheelSpeed(uint8_t wheel, uint8_t speed)
 {
 	// still need to determine which timer is controlling which wheel
 	// speed = PWM value
@@ -423,7 +426,7 @@ void SetWheelSpeed(uint8_t speed, uint8_t wheel)
 // avgMin = min value the running average can be
 // speed = speed to set the wheels
 // This will turn off one of the wheels depending on where the ball is
-void UpdateWheelSpeed(uint8_t avgMax, uint8_t avgMin, uint8_t speed)
+void UpdateWheelSpeed(uint16_t avgMax, uint16_t avgMin, uint8_t speed)
 {
 	uint8_t wheelLeftSpeed = speed;
 	uint8_t wheelRightSpeed = speed;
@@ -439,15 +442,15 @@ void UpdateWheelSpeed(uint8_t avgMax, uint8_t avgMin, uint8_t speed)
 // Updates the wheels
 void UpdateWheels()
 {
-	uint8_t speed = WHEEL_SPEED_ZERO - WHEEL_SPEED_FULL;
+	uint8_t speed = WHEEL_SPEED_FULL;
 	switch (currentState)
 	{
 	case STATE_FIND_BALL:
 		UpdateWheelSpeed(MAX_BALL_X, MIN_BALL_X, speed);
 		break;
 	case STATE_GRAB_BALL:
-		// division by 2 is to slow it down
-		UpdateWheelSpeed(-1, 480, speed / 2); // -1 and 480 are just arbitrary, they need to be outside the pixy cam's x range
+		SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_HALF);
+		SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_HALF);
 		break;
 	case STATE_RETURN_BALL:
 		UpdateWheelSpeed(MAX_RETURN_X, MIN_RETURN_X, speed);
@@ -461,15 +464,17 @@ void UpdateWheels()
 //
 // ============================
 
-#define DIST_TO_BALL	9.0f
+#define DIST_TO_BALL	11.0f
 
 // Checks the value reported by the IR sensor
 uint8_t CheckIR()
 {
-	uint8_t adcVal = 0;
+	uint16_t adcVal = 0;
+	HAL_ADC_Start(&hadc1);
 	HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
 	adcVal = HAL_ADC_GetValue(&hadc1);
 	float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+	//printf("distVal: %f\n", distVal);
 	if (distVal <= DIST_TO_BALL)
 		return 1;
 	return 0;
@@ -482,10 +487,11 @@ uint8_t CheckIR()
 // ============================
 
 // Defines to make code more readable
-#define CLAW_OPEN		100
-#define CLAW_CLOSED		160
+#define CLAW_OPEN		110
+#define CLAW_CLOSED		170
 #define PUSH_TIME		80000
 #define WAIT_TIME		4000000
+#define CLAW_WAIT_TIME	4000000
 
 // Closes the claw
 void CloseClaw()
@@ -499,10 +505,17 @@ void OpenClaw()
 	SetPWM(4, CLAW_OPEN);
 }
 
+void WaitForClaw()
+{
+	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
+	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+	for (int i = 0; i < CLAW_WAIT_TIME; i++);
+}
+
 // Routine for returning the ball
 void ReturnBall()
 {
-	uint8_t speed = WHEEL_SPEED_ZERO - WHEEL_SPEED_FULL;
+	uint8_t speed = WHEEL_SPEED_HALF;
 	//speed /= 2;
 
 	// roll the ball forward
@@ -530,9 +543,11 @@ void UpdateClaw()
 	case STATE_FIND_BALL:
 		return; // Claw shouldn't need to do anything here
 	case STATE_GRAB_BALL:
+    // if IR sensor detects ball
 		if (CheckIR())
 		{
 			CloseClaw();
+			WaitForClaw();
 			UpdateState(STATE_RETURN_BALL);
 		}
 		break;
@@ -603,14 +618,16 @@ int main(void)
 	ClawInit();
 
 	// I don't think we're using these?
-	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-	//HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		//CheckIR();
+		printf("Current state: %d\n", currentState);
 		UpdatePixyCam();
 		UpdateWheels();
 		UpdateClaw();
