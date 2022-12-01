@@ -2255,3 +2255,1119 @@ Finished building: default.size.stdout
  
 Finished building: Project.list
  
+11:16:33 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:476:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:476:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:476:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:476:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:476:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:673:5: warning: "/*" within comment [-Wcomment]
+  673 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46100	    484	   2204	  48788	   be94	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+11:46:19 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:476:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:476:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:476:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:476:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:476:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:673:5: warning: "/*" within comment [-Wcomment]
+  673 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46100	    484	   2204	  48788	   be94	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+11:53:16 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:476:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:476:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:476:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:476:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:476:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:673:5: warning: "/*" within comment [-Wcomment]
+  673 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46188	    484	   2204	  48876	   beec	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+11:57:17 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:481:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  481 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:481:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:481:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  481 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:481:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:481:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:678:5: warning: "/*" within comment [-Wcomment]
+  678 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46260	    484	   2204	  48948	   bf34	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+11:59:27 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:482:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  482 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:482:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:482:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  482 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:482:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:482:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:679:5: warning: "/*" within comment [-Wcomment]
+  679 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46308	    484	   2204	  48996	   bf64	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:04:59 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:483:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  483 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:483:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:483:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  483 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:483:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:483:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:680:5: warning: "/*" within comment [-Wcomment]
+  680 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46340	    484	   2204	  49028	   bf84	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:07:38 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:477:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  477 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:477:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:477:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  477 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:477:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:477:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:674:5: warning: "/*" within comment [-Wcomment]
+  674 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46340	    484	   2204	  49028	   bf84	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:24:49 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:476:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:476:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:476:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  476 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:476:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:476:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:673:5: warning: "/*" within comment [-Wcomment]
+  673 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46292	    484	   2204	  48980	   bf54	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:27:47 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:479:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:479:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:479:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:479:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:479:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:676:5: warning: "/*" within comment [-Wcomment]
+  676 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46308	    484	   2204	  48996	   bf64	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:32:51 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:479:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:479:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:479:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:479:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:479:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:676:5: warning: "/*" within comment [-Wcomment]
+  676 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46316	    484	   2204	  49004	   bf6c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:39:03 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:479:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:479:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:479:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  479 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:479:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:479:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:676:5: warning: "/*" within comment [-Wcomment]
+  676 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46316	    484	   2204	  49004	   bf6c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:44:16 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:480:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  480 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:480:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:480:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  480 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:480:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:480:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:677:5: warning: "/*" within comment [-Wcomment]
+  677 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46308	    484	   2204	  48996	   bf64	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:48:12 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:480:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  480 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:480:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:480:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  480 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:480:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:480:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:677:5: warning: "/*" within comment [-Wcomment]
+  677 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46316	    484	   2204	  49004	   bf6c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+12:57:53 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'GetNextX':
+../Core/Src/main.c:369:2: error: 'noBallLimit' undeclared (first use in this function)
+  369 |  noBallLimit = 0;
+      |  ^~~~~~~~~~~
+../Core/Src/main.c:369:2: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:491:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:491:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:491:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:491:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:491:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:690:5: warning: "/*" within comment [-Wcomment]
+  690 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+make: *** [Core/Src/subdir.mk:34: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+12:58:14 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:491:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:491:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:491:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:491:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:491:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:690:5: warning: "/*" within comment [-Wcomment]
+  690 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46276	    484	   2204	  48964	   bf44	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+13:02:35 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:491:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:491:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:491:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  491 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:491:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:491:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:690:5: warning: "/*" within comment [-Wcomment]
+  690 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46276	    484	   2204	  48964	   bf44	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+13:14:34 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:490:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:490:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:490:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:490:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:490:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:689:5: warning: "/*" within comment [-Wcomment]
+  689 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46252	    484	   2204	  48940	   bf2c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+13:17:49 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:490:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:490:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:490:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:490:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:490:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:688:5: warning: "/*" within comment [-Wcomment]
+  688 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46236	    484	   2204	  48924	   bf1c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+13:20:48 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:490:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:490:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:490:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:490:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:490:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:688:5: warning: "/*" within comment [-Wcomment]
+  688 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46236	    484	   2204	  48924	   bf1c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 
+13:24:09 **** Incremental Build of configuration Debug for project Project ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L4R5xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'pixy_init':
+../Core/Src/main.c:208:23: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  208 |   g_blocks = (Block *)malloc(sizeof(Block)*PIXY_ARRAYSIZE);
+      |                       ^~~~~~
+../Core/Src/main.c:208:23: warning: incompatible implicit declaration of built-in function 'malloc'
+../Core/Src/main.c:72:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   71 | #include "stdio.h"
+  +++ |+#include <stdlib.h>
+   72 | 
+../Core/Src/main.c: In function 'UpdateState':
+../Core/Src/main.c:262:3: warning: implicit declaration of function 'ResetAverage' [-Wimplicit-function-declaration]
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:322:6: warning: conflicting types for 'ResetAverage'
+  322 | void ResetAverage()
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:262:3: note: previous implicit declaration of 'ResetAverage' was here
+  262 |   ResetAverage();
+      |   ^~~~~~~~~~~~
+../Core/Src/main.c: In function 'CheckIR':
+../Core/Src/main.c:490:18: warning: implicit declaration of function 'exp' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                  ^~~
+../Core/Src/main.c:490:18: warning: incompatible implicit declaration of built-in function 'exp'
+../Core/Src/main.c:72:1: note: include '<math.h>' or provide a declaration of 'exp'
+   71 | #include "stdio.h"
+  +++ |+#include <math.h>
+   72 | 
+../Core/Src/main.c:490:23: warning: implicit declaration of function 'log' [-Wimplicit-function-declaration]
+  490 |  float distVal = exp((log(adcVal) - 10.66) / (-1.123));
+      |                       ^~~
+../Core/Src/main.c:490:23: warning: incompatible implicit declaration of built-in function 'log'
+../Core/Src/main.c:490:23: note: include '<math.h>' or provide a declaration of 'log'
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:688:5: warning: "/*" within comment [-Wcomment]
+  688 |    //*
+      |      
+../Core/Src/main.c: In function 'getBlocks':
+../Core/Src/main.c:204:1: warning: control reaches end of non-void function [-Wreturn-type]
+  204 | }
+      | ^
+arm-none-eabi-gcc -o "Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\EECS373\CatchBot\eecs373_CatchBot\Project\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Project.elf
+ 
+arm-none-eabi-size   Project.elf 
+arm-none-eabi-objdump -h -S  Project.elf  > "Project.list"
+   text	   data	    bss	    dec	    hex	filename
+  46236	    484	   2204	  48924	   bf1c	Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: Project.list
+ 

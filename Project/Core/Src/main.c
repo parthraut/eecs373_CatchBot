@@ -327,53 +327,64 @@ void ResetAverage()
 
 // Gets the index of whatever signature we're looking for in the block data from the Pixy cam
 // I'm basically assuming whatever we're looking for will be the first piece of data in the blocks.
-uint16_t GetSignatureIndex(uint32_t num_blocks, uint8_t sigVal)
+uint16_t GetSignatureIndex(uint32_t num_blocks, uint16_t sigVal)
 {
 	int i = 0;
 	while (i < num_blocks)
 	{
 		if (g_blocks[i].signature == sigVal)
-			break;
+		{
+			printf("index: %d\n", i);
+			return i;
+		}
 		i++;
 	}
-	return i;
+	return num_blocks;
 }
 
 // Signatures of the items we're looking for
 // Will need to make sure these match the actual signatures in the Pixy cam
 #define PIXY_SIG_BALL				1
 #define PIXY_SIG_RETURN				2
+#define NO_BALL_LIMIT				50
 
 // temporary, idk if it'll even work
 #define HEIGHT	185
 
+uint16_t noBallCounter = 0;
+uint16_t objectWidth = 0;
 // Gets the X value of the signature items and updates the running average
 // sig = one of the two signatures defined above
-void GetNextX(uint8_t sig)
+void GetNextX(uint16_t sig)
 {
 	uint32_t num_blocks = getBlocks(PIXY_ARRAYSIZE);
 	if (!num_blocks)
-		return;
-
-	uint16_t index = GetSignatureIndex(num_blocks, sig);
-	uint16_t newX = 0;
-	if (index != num_blocks)
 	{
-		newX = g_blocks[index].x;
+		noBallCounter += 1;
+		if (noBallCounter >= NO_BALL_LIMIT)
+			ResetAverage();
+		return;
 	}
 
-	//printf("width: %d\n", g_blocks[index].height);
-	//printf("y val: %d\n", g_blocks[index].y);
-	// x vals don't go above 320
+	noBallCounter = 0;
+
+	uint16_t index = GetSignatureIndex(num_blocks, sig);
+	if (index == num_blocks)
+		return;
+
+	uint16_t newX = g_blocks[index].x;
 	int16_t diff = newX - xVals[xValsIndex];
 	runningAverage += diff * 0.25f;
 
 	xVals[xValsIndex] = newX;
 	xValsIndex = (xValsIndex + 1) % 4;
 
-	// I have no idea if this will even work, I just wanted to make sure there was a way to get to each state
 	if (g_blocks[index].y >= HEIGHT && currentState == STATE_FIND_BALL)
+	{
 		UpdateState(STATE_GRAB_BALL);
+	}
+
+	objectWidth = g_blocks[index].width;
 }
 
 
@@ -403,12 +414,13 @@ void UpdatePixyCam()
 #define WHEEL_LEFT			2
 #define WHEEL_RIGHT			3
 #define WHEEL_SPEED_ZERO	139
+#define WHEEL_SPEED_MAX		0
 #define WHEEL_SPEED_FULL	80
 #define WHEEL_SPEED_HALF	120
-#define MAX_BALL_X			220
-#define MIN_BALL_X			100
-#define MAX_RETURN_X		190
-#define MIN_RETURN_X		130
+#define MAX_BALL_X			190
+#define MIN_BALL_X			130
+#define MAX_RETURN_X		180
+#define MIN_RETURN_X		140
 
 // Sets the wheel speed
 // speed = PWM value for the wheel
@@ -420,6 +432,8 @@ void SetWheelSpeed(uint8_t wheel, uint8_t speed)
 	// speed = PWM value
 	SetPWM(wheel, speed);
 }
+
+#define RETURN_WIDTH	60
 
 // Updates the wheel speed
 // avgMax = max value the running average can be
@@ -489,9 +503,9 @@ uint8_t CheckIR()
 // Defines to make code more readable
 #define CLAW_OPEN		110
 #define CLAW_CLOSED		170
-#define PUSH_TIME		80000
-#define WAIT_TIME		4000000
-#define CLAW_WAIT_TIME	4000000
+#define PUSH_TIME		200000
+#define WAIT_TIME		1000000
+#define CLAW_WAIT_TIME	200000
 
 // Closes the claw
 void CloseClaw()
@@ -515,7 +529,7 @@ void WaitForClaw()
 // Routine for returning the ball
 void ReturnBall()
 {
-	uint8_t speed = WHEEL_SPEED_HALF;
+	uint8_t speed = WHEEL_SPEED_MAX;
 	//speed /= 2;
 
 	// roll the ball forward
@@ -530,9 +544,10 @@ void ReturnBall()
 	for (int i = 0; i < WAIT_TIME; i++);
 
 	// turn a bit so the camera doesn't immediately find the ball again
+	speed = WHEEL_SPEED_FULL;
 	SetWheelSpeed(WHEEL_LEFT, speed);
 	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
-	for (int i = 0; i < PUSH_TIME; i++);
+	for (int i = 0; i < PUSH_TIME * 2; i++);
 }
 
 // Update the claw
@@ -617,7 +632,6 @@ int main(void)
 	WheelsInit();
 	ClawInit();
 
-	// I don't think we're using these?
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
 	/* USER CODE END 2 */
@@ -627,7 +641,7 @@ int main(void)
 	while (1)
 	{
 		//CheckIR();
-		printf("Current state: %d\n", currentState);
+		//printf("Current state: %d\n", currentState);
 		UpdatePixyCam();
 		UpdateWheels();
 		UpdateClaw();
