@@ -48,6 +48,7 @@ SPI_HandleTypeDef hspi1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
 
 /* USER CODE BEGIN PV */
 
@@ -62,6 +63,7 @@ static void MX_ADC1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_TIM5_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -238,6 +240,9 @@ void SetPWM(uint16_t timerIndex, uint16_t pwmVal)
 	case 4:
 		timer = TIM4;
 		break;
+	case 5:
+		timer = TIM5;
+		break;
 	default:
 		return; // just in case.
 	}
@@ -249,13 +254,16 @@ void SetPWM(uint16_t timerIndex, uint16_t pwmVal)
 #define STATE_FIND_BALL		0
 #define STATE_GRAB_BALL		1
 #define STATE_RETURN_BALL	2
+#define STATE_IDLE			4
 
-uint8_t currentState = STATE_FIND_BALL;
+uint8_t currentState = STATE_IDLE;
 
 // Updates the current state
 void UpdateState(uint8_t nextState)
 {
 	currentState = nextState;
+	ResetAverage();
+	/*
 	switch(currentState)
 	{
 	case STATE_FIND_BALL:
@@ -266,7 +274,54 @@ void UpdateState(uint8_t nextState)
 	case STATE_RETURN_BALL:
 		ResetAverage();
 		break;
+	case STATE_
 	}
+	//*/
+}
+
+// ============================
+//
+// Start: Code to handle start button and head
+//
+// ============================
+
+void CheckButton()
+{
+	if (HAL_GPIO_ReadPin(GPIOG, GPIO_PIN_0))
+		UpdateState(STATE_FIND_BALL);
+}
+
+#define HEAD_SERVO_MID			140
+#define HEAD_SERVO_MAX			180
+#define HEAD_SERVO_MIN			100
+#define HEAD_SERVO_CHANGE		2
+#define HEAD_SERVO_COUNTER_MAX	80
+
+uint16_t headServoWidth = HEAD_SERVO_MIN;
+uint16_t headServoChange = HEAD_SERVO_CHANGE;
+uint16_t headServoCounter = 0;
+
+void UpdateHead()
+{
+	headServoCounter += 1;
+	if (headServoCounter < HEAD_SERVO_COUNTER_MAX)
+		return;
+
+	headServoCounter = 0;
+	if (currentState == STATE_IDLE ||
+		currentState == STATE_GRAB_BALL)
+	{
+		headServoWidth = HEAD_SERVO_MID;
+	}
+	else
+	{
+		headServoWidth += headServoChange;
+		if (headServoWidth >= HEAD_SERVO_MAX)
+			headServoChange = -1 * HEAD_SERVO_CHANGE;
+		if (headServoWidth <= HEAD_SERVO_MIN)
+			headServoChange = HEAD_SERVO_CHANGE;
+	}
+	SetPWM(5, headServoWidth);
 }
 
 // ============================
@@ -541,13 +596,15 @@ void ReturnBall()
 	// stop for a little bit
 	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
 	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+	/*
 	for (int i = 0; i < WAIT_TIME; i++);
 
 	// turn a bit so the camera doesn't immediately find the ball again
 	speed = WHEEL_SPEED_FULL;
-	SetWheelSpeed(WHEEL_LEFT, speed);
-	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
+	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
+	SetWheelSpeed(WHEEL_RIGHT, speed);
 	for (int i = 0; i < PUSH_TIME * 2; i++);
+	//*/
 }
 
 // Update the claw
@@ -601,50 +658,62 @@ void ClawInit()
   */
 int main(void)
 {
-	/* USER CODE BEGIN 1 */
-	/* USER CODE END 1 */
+  /* USER CODE BEGIN 1 */
+  /* USER CODE END 1 */
 
-	/* MCU Configuration--------------------------------------------------------*/
+  /* MCU Configuration--------------------------------------------------------*/
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
-	/* USER CODE BEGIN Init */
+  /* USER CODE BEGIN Init */
 	pixy_init();
-	/* USER CODE END Init */
+  /* USER CODE END Init */
 
-	/* Configure the system clock */
-	SystemClock_Config();
+  /* Configure the system clock */
+  SystemClock_Config();
 
-	/* USER CODE BEGIN SysInit */
+  /* USER CODE BEGIN SysInit */
 
-	/* USER CODE END SysInit */
+  /* USER CODE END SysInit */
 
-	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_SPI1_Init();
-	MX_LPUART1_UART_Init();
-	MX_ADC1_Init();
-	MX_TIM2_Init();
-	MX_TIM3_Init();
-	MX_TIM4_Init();
-	/* USER CODE BEGIN 2 */
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_SPI1_Init();
+  MX_LPUART1_UART_Init();
+  MX_ADC1_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
+  MX_TIM5_Init();
+  /* USER CODE BEGIN 2 */
 	WheelsInit();
 	ClawInit();
 
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_SET);
-	/* USER CODE END 2 */
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, GPIO_PIN_SET);
 
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
+	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		UpdateHead();
+		if (currentState == STATE_IDLE)
+		{
+			CheckButton();
+		}
+		else
+		{
+			UpdatePixyCam();
+			UpdateWheels();
+			UpdateClaw();
+		}
 		//CheckIR();
 		//printf("Current state: %d\n", currentState);
-		UpdatePixyCam();
-		UpdateWheels();
-		UpdateClaw();
 
 		/*
 		//Used to test the Claw PMW, Timer is on 2.5ms period and .1MHz resolution
@@ -701,11 +770,11 @@ int main(void)
 			}
 		}
 		//*/
-		/* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-		/* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 	}
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /**
@@ -1076,6 +1145,55 @@ static void MX_TIM4_Init(void)
 }
 
 /**
+  * @brief TIM5 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM5_Init(void)
+{
+
+  /* USER CODE BEGIN TIM5_Init 0 */
+
+  /* USER CODE END TIM5_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM5_Init 1 */
+
+  /* USER CODE END TIM5_Init 1 */
+  htim5.Instance = TIM5;
+  htim5.Init.Prescaler = 39;
+  htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim5.Init.Period = 1999;
+  htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_PWM_Init(&htim5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 10;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim5, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM5_Init 2 */
+
+  /* USER CODE END TIM5_Init 2 */
+  HAL_TIM_MspPostInit(&htim5);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -1085,16 +1203,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOG_CLK_ENABLE();
   HAL_PWREx_EnableVddIO2();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_15, GPIO_PIN_RESET);
@@ -1108,6 +1230,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PG0 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PG1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PE15 */
   GPIO_InitStruct.Pin = GPIO_PIN_15;
