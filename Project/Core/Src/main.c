@@ -471,11 +471,11 @@ void UpdatePixyCam()
 #define WHEEL_SPEED_ZERO	139
 #define WHEEL_SPEED_MAX		0
 #define WHEEL_SPEED_FULL	80
-#define WHEEL_SPEED_HALF	120
+#define WHEEL_SPEED_HALF	100
 #define MAX_BALL_X			190
 #define MIN_BALL_X			130
-#define MAX_RETURN_X		180
-#define MIN_RETURN_X		140
+#define MAX_RETURN_X		220
+#define MIN_RETURN_X		100
 
 // Sets the wheel speed
 // speed = PWM value for the wheel
@@ -534,7 +534,11 @@ void UpdateWheels()
 // ============================
 
 #define DIST_TO_BALL	11.0f
+#define maxCount		2
+#define irTimerMax		2000
 
+uint8_t counter = 0;
+uint16_t irtimer = 0;
 // Checks the value reported by the IR sensor
 uint8_t CheckIR()
 {
@@ -545,7 +549,21 @@ uint8_t CheckIR()
 	float distVal = exp((log(adcVal) - 10.66) / (-1.123));
 	//printf("distVal: %f\n", distVal);
 	if (distVal <= DIST_TO_BALL)
+		counter += 1;
+	else
+		counter = 0;
+
+	irtimer += 1;
+	if (irtimer >= irTimerMax)
+	{
+		UpdateState(STATE_FIND_BALL);
+		irtimer = 0;
+	}
+	if (counter >= maxCount)
+	{
+		irtimer = 0;
 		return 1;
+	}
 	return 0;
 }
 
@@ -596,7 +614,7 @@ void ReturnBall()
 	// stop for a little bit
 	SetWheelSpeed(WHEEL_LEFT, WHEEL_SPEED_ZERO);
 	SetWheelSpeed(WHEEL_RIGHT, WHEEL_SPEED_ZERO);
-	/*
+	//*
 	for (int i = 0; i < WAIT_TIME; i++);
 
 	// turn a bit so the camera doesn't immediately find the ball again
